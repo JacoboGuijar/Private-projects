@@ -1,0 +1,162 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <windows.h>
+#define MAX 30
+#define TIMES 2
+#define TIMESMAX 60
+int *vectoraleatorio();
+void swap(int A[], int i, int j);
+void shuffle(int A[]);
+void muestraGrafico(int vector[]);
+void GotoXY(int x, int y);
+int * burbuja(int *v);
+int * quicksort(int *target, int left, int right);
+/*Programa en C para ver el comportamiento de el algoritmo burbuja de forma grafica en la consola
+si no se muestra de forma apropiada ajusta la pantalla en la funcion GotoXY dentro de muestraGrafico
+Si se desesa cambiar el tamaño del grafico modificar TIMESMAX,TIMES y MAX, al igual que size,veces y max.
+
+int main()
+{
+    int max=50;
+    int veces=2;
+    int size=max*veces;
+    int *vector;
+    printf("Hacemos un array de tamaño %d * %d= %d\n\n", max,veces ,size);
+    vector=vectoraleatorio();
+    printf("\n");
+    getchar();
+    shuffle(vector);
+    printf("\n");
+    muestraGrafico(vector);
+    vector=burbuja(vector);
+        printf("\n");
+        printf("\n");
+        GotoXY(0,10);
+        for(int i=0;i<TIMESMAX;i++){
+        printf("%d ",*(vector+i));
+    }
+    muestraGrafico(vector);
+
+}
+int * vectoraleatorio() {
+    static int aleatorio[MAX];
+    static int vectorveces[TIMESMAX];
+    srand(time(NULL));
+    for(int i=0;i<MAX;i++){//Declaracion de vectoraleatorio un vector de valores sin repetir tamaño MAX.
+        aleatorio[i]=(rand()%(MAX))+1;
+            for(int j=0;j<i;j++){
+                while(aleatorio[i]==aleatorio[j])
+                    if(aleatorio[i]==aleatorio[j]){
+                        aleatorio[i]=(rand()%(MAX))+1;
+                        j=0;
+                    }
+            }
+    }
+    for(int i=0;i<MAX;i++){
+            for(int j=0;j<TIMES;j++){
+                    int a=i+MAX*j;
+                vectorveces[a]=aleatorio[i];
+            }
+    }
+return vectorveces;
+}
+void swap(int A[], int i, int j) {
+	int temp = A[i];
+	A[i] = A[j];
+	A[j] = temp;
+}
+
+void shuffle(int A[]){
+	for (int i = TIMESMAX - 1; i >= 1; i--){
+            int j = rand() % (i + 1);
+            swap(A, i, j);
+	}
+}
+void muestraGrafico(int vector[]){
+    int caracteres[TIMESMAX][MAX];
+    int n=0;
+    for(int i=0;i<TIMESMAX;i++){
+            GotoXY(0+i+n,71);
+            for(int j=0;j<MAX;j++){
+                    if(j<vector[i]){
+                        caracteres[i][j]=219;
+                        caracteres[TIMESMAX-i-1][j]=210;
+                    }
+                    else{
+                        caracteres[i][j]=32;
+                        caracteres[TIMESMAX-i-1][j]=32;
+                    }
+                    printf("%c ",caracteres[i][j]);
+                    GotoXY(0+i+n,71-j);
+            }
+            n=n+2;
+            printf("\n");
+    }
+    //la forma de aqui abajo es mas elegante pero todavia no lo he corregido. Hace que aparezca una barra abajo del todo no sé por qué.
+//    int n=0;
+//    for (int i=0;i<TIMESMAX;i++){
+//        GotoXY(0+i,72);
+//        for(int j=0;j<vector[i];j++){
+//            printf("%c",219);
+//            GotoXY(0+i+n,72-j);
+//        }
+//        n=n+1;
+//        printf("\n");
+//    }
+}
+
+void GotoXY(int x, int y){
+    HANDLE a;
+    COORD b;
+    fflush(stdout);
+    b.X = x;
+    b.Y = y;
+    a = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(a,b);
+
+}
+
+int * quicksort(int *target, int left, int right) {//este es más rapido pero lo tengo que depurar todavia
+  if(left >= right) return target;
+  int i = left;
+  int j = right;
+  int tmp, pivot = target[i];
+  for(;;) {
+        while(target[i] < pivot) i++;
+        while(pivot < target[j]) j--;
+        if(i >= j) break;
+                tmp = target[i];
+                target[i] = target[j];
+                target[j] = tmp;
+                i++;
+                j--;
+                muestraGrafico(target);
+  }
+
+  quicksort(target, left, i-1);
+  quicksort(target, j+1, right);
+return target;
+}
+
+int * burbuja(int *v){
+    static int vector[TIMESMAX];
+    int comp1,comp2;
+        for(int i=0;i<TIMESMAX;i++){
+            vector[i]=*(v+i);
+            printf("%d  ",vector[i]);
+        }
+
+        for(int i=0;i<TIMESMAX;i++){
+                for (int j=0;j<i;j++){
+                        if(vector[j]>vector[i]){
+                                comp1=vector[i];
+                                comp2=vector[j];
+                                vector[i]=comp2;
+                                vector[j]=comp1;
+                        }
+                }
+                muestraGrafico(vector);
+        }
+    return vector;
+}
