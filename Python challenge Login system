@@ -1,0 +1,37 @@
+#Login system
+import os
+import msvcrt
+def set_user_pwd():
+	print('Vamos a crear un usuario y contraseña: ')
+	user=input('Introduce un nombre de usuario: ')
+	pwd=input('Introduce una contraseña: ')
+	db[pwd]=user
+	print(db)
+
+def try_user_pwd():
+	attemps=0
+	while attemps<5:
+		user=input('Introduzca su nombre de usuario: ')
+		pwd=input('Introduzca su contraseña: ')
+		if pwd in db:
+			print('Olé tú lo has conseguido. ')
+		else:
+			attemps=attemps+1
+	print('has excedido el numero de intentos ')
+
+db={}
+x=0
+while x!=3:
+	clear=lambda: os.system('cls')
+	clear()
+	x=int(input('Pulse 1 para añadir usuario o 2 para entrar a su cuenta o 3 para salir'))
+	if x==1:
+		set_user_pwd()#¡¡FUNCIONA!!
+	elif x==2:	
+		try_user_pwd()
+	else:
+		print('No ha introducido un numero entre 1 y 3')
+	print('Pulse una tecla para continuar')
+	msvcrt.getch()
+
+print('Se acabó la fiesta has pulsado 3')
