@@ -1,0 +1,81 @@
+#FOURIER
+import pygame
+from math import sin,cos, pi
+from random import randint
+
+
+WHITE =     (255, 255, 255)
+BLACK = 	(0,0,0)
+GRAY = 		(100,100,100)
+GREY = 		(100,100,100)
+TRANS = 	(1, 1, 1)
+BLUE =      (  0,   0, 255)
+GREEN =     (  0, 255,   0)
+RED =       (255,   0,   0)
+(width, height) = (1500, 800)
+radius=50
+running = True
+x=200
+y=400
+time=0
+wave=[]
+max_points=2000
+
+def main():
+	global running, screen,time
+
+	pygame.init()
+	screen = pygame.display.set_mode((width, height))
+	pygame.display.set_caption("Serie de Fourier")
+	screen.fill((0,0,0))
+	drawCircle()
+	pygame.display.update()
+	runnning=True
+	while running:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				running = False
+		
+		drawCircle()
+		tinyCircle(time)
+		pygame.display.update()
+		wave.append(y)
+
+		screen.fill((0,0,0))
+		time+=0.01
+
+
+def drawCircle():
+	pygame.draw.circle(screen, WHITE, (200,400), int(radius),1)
+
+def tinyCircle(time):
+	global wave,radius
+	
+	x=0
+	y=0
+	for i in range (0,2):
+		prev_x=x
+		prev_y=y
+
+		n=i*2+1
+		radius= 100*(4/(n*pi))
+		x+=radius*cos(n*time)
+		y+=radius*sin(n*time)
+		
+		pygame.draw.circle(screen,GRAY,(200+int(prev_x),400+int(prev_y)),int(radius),1)
+		pygame.draw.line(screen,WHITE,(200+int(x),400+int(y)),(200+int(prev_x),400+int(prev_y)),1)
+		prev_x=x
+		prev_y=y
+	wave.insert(0,int(y))
+	pygame.draw.circle(screen, WHITE, (200+int(x),398+int(y)), 5,5)
+	
+	for i in range(len(wave)):
+		pygame.draw.circle(screen, (randint(1,255),randint(1,255),randint(1,255)),(400+i,400+wave[i]),1)
+		
+	pygame.draw.line(screen,RED,(400,400+wave[0]),(200+int(x),400+int(y)),1)
+	if len(wave)>600:
+		wave.pop(-1)
+
+
+if __name__ == '__main__':
+	main()
