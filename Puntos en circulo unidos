@@ -1,0 +1,88 @@
+import pygame,time
+from math import sin,cos, pi
+from random import randint
+
+
+WHITE =     (255, 255, 255)
+BLACK = 	(0,0,0)
+GRAY = 		(100,100,100)
+
+(width, height) = (1480, 780)
+radius=350
+running = True
+x=200
+y=400
+wave=[]
+max_points=50
+total=1.01
+check=True
+def main():
+	global running, screen
+
+	pygame.init()
+	screen = pygame.display.set_mode((width, height))
+	pygame.display.set_caption("Serie de Fourier")
+	screen.fill((0,0,0))
+	drawCircle()
+	pygame.display.update()
+	runnning=True
+	while running:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				running = False
+		grid()
+		drawCircle()
+		cardioide()
+		pygame.display.update()
+		screen.fill((0,0,0))
+		#time.sleep(0.002)
+
+def drawCircle():
+	pygame.draw.circle(screen, WHITE, (750,390), int(radius),1)
+
+def cardioide():
+	global radius,total,check
+	n=0.005	
+	phi=2*pi/total
+	pho=0
+	for i in range(0,int(total)):
+		x1=radius*cos(pho)
+		y1=radius*sin(pho)
+		x2=radius*cos(phi)
+		y2=radius*sin(phi)
+		x3=radius*cos(pho+pi/2)
+		y3=radius*sin(pho+pi/2)
+		x4=radius*cos(phi+pi/2)
+		y4=radius*sin(phi+pi/2)
+		#pygame.draw.circle(screen, WHITE, (750+int(x),390+int(y)), int(radius),1)
+		pygame.draw.line(screen, WHITE, (750+int(x1),390+int(y1)),(750-int(x2),390-int(y2)),1)
+		pygame.draw.line(screen, WHITE, (750+int(x1),390+int(y1)),(750+int(x2),390+int(y2)),1)
+		pygame.draw.line(screen, WHITE, (750+int(x3),390+int(y3)),(750-int(x4),390-int(y4)),1)
+		pygame.draw.line(screen, WHITE, (750+int(x3),390+int(y3)),(750+int(x4),390+int(y4)),1)
+		pho=pho+phi
+	if total>max_points:
+		check=False
+	elif total<1:
+		check=True
+	
+	if check==True:
+		total+=n
+	if check==False:
+		total-=n
+	print (total)
+
+def grid():
+	i=0
+	while i<1480:
+		pygame.draw.line(screen,(20,20,20),(i,0),(i,800),1)
+		i=i+10
+	i=0
+	while i<780:
+		pygame.draw.line(screen,(20,20,20),(0,i),(1500,i),1)
+		i=i+10
+	pygame.draw.line(screen,WHITE,(0,400),(1500,400),1)
+	pygame.draw.line(screen,WHITE,(750,0),(750,800),1)
+
+
+if __name__ == '__main__':
+	main()
