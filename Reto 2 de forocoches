@@ -1,0 +1,4 @@
+from twitter_scraper import Profile #instalar twitter_scrapper: python -m pip install twitter_scrapper
+usuario = input() #Introducir el usuario
+print(usuario+' está siguiendo a '+str(Profile(usuario).following_count)+' cuentas.\n'+usuario+' tiene '+str(Profile(usuario).followers_count)+' seguidores.\n'+usuario+'Ha tuiteado '+str(Profile(usuario).tweets_count)+' veces')
+#Bastante mejorable, pero la cosa era hacerlo en la menor cantidad de lineas posibles
